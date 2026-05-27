@@ -1,0 +1,24 @@
+# Dependencies
+frontend/node_modules/
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+
+# Database
+*.db
+*.sqlite
+
+# Environment
+.env
+.env.local
+
+# Build
+frontend/dist/
+backend/dist/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
