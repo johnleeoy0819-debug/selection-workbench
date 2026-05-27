@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>选品工作台 — minimalist-ui 风格预览</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=Instrument+Serif:ital@0;1&display=swap');
+
+  :root {
+    --bg: #F7F6F3;
+    --card: #FFFFFF;
+    --border: #EAEAEA;
+    --text: #111111;
+    --text-muted: #6B6B6B;
+    --text-faint: #A0A0A0;
+    --accent: #111111;
+    --tag-bg: #F0EFEB;
+    --green: #2D8A56;
+    --red: #D94A4A;
+    --amber: #D9A34A;
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Instrument Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .header .subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  /* ── Bento Grid ── */
+  .bento {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .card-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-faint);
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .card-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ── Score Row ── */
+  .score-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .score-item {
+    flex: 1;
+  }
+  .score-value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+  .score-label {
+    font-size: 11px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+  }
+
+  /* ── Table ── */
+  .table-card {
+    grid-column: 1 / -1;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-faint);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  td {
+    padding: 14px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:last-child td { border-bottom: none; }
+
+  /* ── Tag / Badge ── */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: var(--tag-bg);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .tag.green { background: #E8F5EF; color: var(--green); }
+  .tag.red   { background: #FDEAEA; color: var(--red); }
+  .tag.amber { background: #FDF5E8; color: var(--amber); }
+
+  .profit-pos { color: var(--green); font-weight: 600; }
+  .profit-neg { color: var(--red); font-weight: 600; }
+
+  /* ── Button ── */
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: -0.2px;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  /* ── Rank Number ── */
+  .rank {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--tag-bg);
+  }
+
+  /* ── Sparkline mock ── */
+  .sparkline {
+    width: 64px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  /* ── Mobile Responsive ── */
+  @media (max-width: 768px) {
+    .container { padding: 24px 16px; }
+
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .header h1 { font-size: 28px; }
+
+    .bento {
+      grid-template-columns: 1fr;
+    }
+
+    .card { padding: 18px; }
+
+    .card-title { font-size: 17px; }
+
+    .score-row { gap: 12px; }
+    .score-value { font-size: 22px; }
+
+    /* 表格横向滚动 */
+    .table-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { min-width: 600px; font-size: 13px; }
+    th, td { padding: 10px 12px; white-space: nowrap; }
+
+    /* 排行榜卡片中各项适配 */
+    .card[style*="grid-row"] > div > div[style*="display:flex"] {
+      gap: 10px !important;
+      padding: 10px !important;
+    }
+
+    .btn { padding: 10px 18px; font-size: 13px; }
+  }
+
+  @media (max-width: 400px) {
+    .container { padding: 16px 12px; }
+    .header h1 { font-size: 24px; }
+    .card { padding: 14px; }
+    .card-title { font-size: 16px; }
+    .score-value { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>选品工作台</h1>
+      <div class="subtitle">挂钩 · Hook Category · 第 1 期</div>
+    </div>
+    <div style="display:flex; gap: 10px;">
+      <button class="btn btn-ghost">导入 eRank CSV</button>
+      <button class="btn">+ 新增候选品</button>
+    </div>
+  </div>
+
+  <!-- Bento -->
+  <div class="bento">
+
+    <!-- Top Card: 总分概览 -->
+    <div class="card" style="grid-row: span 2;">
+      <div class="card-label">综合评分排行</div>
+      <div style="display:flex; flex-direction:column; gap: 16px; margin-top: 12px;">
+
+        <!-- Row 1 -->
+        <div style="display:flex; align-items:center; gap: 14px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius);">
+          <div class="rank" style="background:#111; color:#fff;">1</div>
+          <div style="flex:1;">
+            <div style="font-weight:600; font-size:15px;">极简铁艺挂钩 3 钩款</div>
+            <div style="font-size:12px; color:var(--text-muted);">关键词: minimalist wall hook · 月搜索 14.8K</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:22px; font-weight:700;">89</div>
+            <div style="font-size:11px; color:var(--green);">高潜力</div>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div style="display:flex; align-items:center; gap: 14px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius);">
+          <div class="rank">2</div>
+          <div style="flex:1;">
+            <div style="font-weight:600; font-size:15px;">山毛榉木衣帽钩 5 钩</div>
+            <div style="font-size:12px; color:var(--text-muted);">关键词: wooden coat hook · 月搜索 9.2K</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:22px; font-weight:700;">76</div>
+            <div style="font-size:11px; color:var(--amber);">关注</div>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div style="display:flex; align-items:center; gap: 14px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius);">
+          <div class="rank">3</div>
+          <div style="flex:1;">
+            <div style="font-weight:600; font-size:15px;">黄铜几何挂钩 单钩</div>
+            <div style="font-size:12px; color:var(--text-muted);">关键词: brass geometric hook · 月搜索 4.6K</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:22px; font-weight:700;">68</div>
+            <div style="font-size:11px; color:var(--text-muted);">观望</div>
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div style="display:flex; align-items:center; gap: 14px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius);">
+          <div class="rank">4</div>
+          <div style="flex:1;">
+            <div style="font-weight:600; font-size:15px;">磁吸钥匙挂钩 2 钩</div>
+            <div style="font-size:12px; color:var(--text-muted);">关键词: magnetic key holder hook · 月搜索 22.1K</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:22px; font-weight:700;">61</div>
+            <div style="font-size:11px; color:var(--text-muted);">观望</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 市场数据卡片 -->
+    <div class="card">
+      <div class="card-label">市场规模</div>
+      <div class="card-title">14,800</div>
+      <div class="card-sub">月均搜索量 (挂钩品类)</div>
+      <div class="score-row">
+        <div class="score-item">
+          <div class="score-value" style="color:var(--red);">$14.2</div>
+          <div class="score-label">均价</div>
+        </div>
+        <div class="score-item">
+          <div class="score-value" style="color:var(--text);">4.2K</div>
+          <div class="score-label">竞品数</div>
+        </div>
+        <div class="score-item">
+          <div class="score-value" style="color:var(--green);">32%</div>
+          <div class="score-label">机会指数</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 趋势卡片 -->
+    <div class="card">
+      <div class="card-label">搜索趋势 (90天)</div>
+      <svg width="100%" height="80" style="margin-top:8px;">
+        <polyline fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          points="10,70 50,60 80,65 120,45 160,50 200,30 240,35 280,20 320,25 360,8"/>
+      </svg>
+    </div>
+
+    <!-- 利润估算卡片 -->
+    <div class="card">
+      <div class="card-label">利润估算 · 极简铁艺挂钩</div>
+      <div class="score-row" style="border:none; padding-top:8px;">
+        <div class="score-item">
+          <div class="score-value" style="font-size:20px;">¥12.5</div>
+          <div class="score-label">1688 成本</div>
+        </div>
+        <div class="score-item">
+          <div class="score-value" style="font-size:20px;">$14.99</div>
+          <div class="score-label">Etsy 定价</div>
+        </div>
+        <div class="score-item">
+          <div class="score-value profit-pos" style="font-size:20px;">+62%</div>
+          <div class="score-label">毛利率</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 合规卡片 -->
+    <div class="card">
+      <div class="card-label">合规检查</div>
+      <div style="display:flex; flex-direction:column; gap: 8px; margin-top: 8px;">
+        <div style="display:flex; justify-content: space-between; align-items:center;">
+          <span style="font-size:13px;">定制设计参与</span>
+          <span class="tag green">通过</span>
+        </div>
+        <div style="display:flex; justify-content: space-between; align-items:center;">
+          <span style="font-size:13px;">生产合作商公开</span>
+          <span class="tag green">通过</span>
+        </div>
+        <div style="display:flex; justify-content: space-between; align-items:center;">
+          <span style="font-size:13px;">非简单转售</span>
+          <span class="tag green">通过</span>
+        </div>
+        <div style="display:flex; justify-content: space-between; align-items:center;">
+          <span style="font-size:13px;">材质安全认证</span>
+          <span class="tag amber">待确认</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 关键词表格 -->
+    <div class="card table-card">
+      <div class="card-label">关键词分析 · 热门机会词</div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>关键词</th>
+            <th>月搜索</th>
+            <th>竞品数</th>
+            <th>竞争度</th>
+            <th>机会</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank">1</span></td>
+            <td style="font-weight:600;">minimalist wall hook</td>
+            <td>14,800</td>
+            <td>3,200</td>
+            <td><span class="tag amber">中</span></td>
+            <td class="profit-pos">高</td>
+          </tr>
+          <tr>
+            <td><span class="rank">2</span></td>
+            <td style="font-weight:600;">wooden coat hook</td>
+            <td>9,200</td>
+            <td>5,100</td>
+            <td><span class="tag red">高</span></td>
+            <td class="profit-pos">中</td>
+          </tr>
+          <tr>
+            <td><span class="rank">3</span></td>
+            <td style="font-weight:600;">magnetic key holder</td>
+            <td>22,100</td>
+            <td>8,400</td>
+            <td><span class="tag red">高</span></td>
+            <td><span style="color:var(--text-muted);">低</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank">4</span></td>
+            <td style="font-weight:600;">brass geometric hook</td>
+            <td>4,600</td>
+            <td>890</td>
+            <td><span class="tag green">低</span></td>
+            <td class="profit-pos">极高</td>
+          </tr>
+          <tr>
+            <td><span class="rank">5</span></td>
+            <td style="font-weight:600;">modern entryway hooks</td>
+            <td>6,300</td>
+            <td>2,100</td>
+            <td><span class="tag amber">中</span></td>
+            <td class="profit-pos">高</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align:center; margin-top: 48px; font-size: 12px; color: var(--text-faint);">
+    minimalist-ui · 选品工作台 v0.1 · Hermes Agent
+  </div>
+
+</div>
+
+</body>
+</html>
