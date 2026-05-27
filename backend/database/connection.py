@@ -43,13 +43,18 @@ def get_db():
 
 
 def init_db():
-    """初始化数据库：执行 schema.sql"""
+    """初始化数据库：执行 schema.sql（逐条执行）"""
     schema_path = Path(__file__).parent / "schema.sql"
     if not schema_path.exists():
         raise FileNotFoundError(f"Schema file not found: {schema_path}")
     
+    with open(schema_path, "r", encoding="utf-8") as f:
+        sql = f.read()
+    
+    # 按分号分割语句，逐条执行
+    statements = [s.strip() for s in sql.split(";") if s.strip()]
+    
     with engine.connect() as conn:
-        with open(schema_path, "r", encoding="utf-8") as f:
-            sql = f.read()
-        conn.exec_driver_sql(sql)
+        for stmt in statements:
+            conn.exec_driver_sql(stmt)
         conn.commit()
