@@ -11,7 +11,47 @@ from models.schemas import ScoreCreate, ScoreResponse
 from services.scoring_engine import ScoringEngine
 from services.pricing_calculator import PricingCalculator
 
+from services.ai_scoring import ai_score_keyword
+
 router = APIRouter(prefix="/api/scoring", tags=["scoring"])
+
+
+@router.post("/ai/{keyword_id}")
+async def ai_score_keyword_endpoint(
+    keyword_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    AI 智能评分 - 基于关键词数据调用 DeepSeek v4 pro
+    
+    输入：keyword_id
+    输出：五维评分 + 决策建议 + AI 分析理由
+    """
+    from database.models import Keyword
+    
+    keyword = db.query(Keyword).filter(Keyword.id == keyword_id).first()
+    if not keyword:
+        raise HTTPException(404, "关键词不存在")
+    
+    try:
+        result = await ai_score_keyword(
+            keyword=str(keyword.keyword),
+            avg_searches=int(keyword.avg_searches) if keyword.avg_searches else None,
+            avg_clicks=int(keyword.avg_clicks) if keyword.avg_clicks else None,
+            ctr=int(keyword.ctr) if keyword.ctr else None,
+            competition=int(keyword.competition) if keyword.competition else None,
+            kd=int(keyword.kd) if keyword.kd else None,
+            peak_months=str(keyword.peak_months) if keyword.peak_months else None,
+        )
+        return {
+            "keyword": keyword.keyword,
+            "ai_scores": result,
+            "model": "deepseek-v4-pro"
+        }
+    except ValueError as e:
+        raise HTTPException(500, f"AI 评分服务未配置: {str(e)}")
+    except Exception as e:
+        raise HTTPException(500, f"AI 评分失败: {str(e)}")
 
 
 @router.post("/{product_id}", response_model=ScoreResponse)
